@@ -130,7 +130,7 @@ export default function Home() {
 
     if (!product) return 0;
 
-    return product.price * quantity;
+    return Number(product.price) * quantity;
   }, [selectedProduct, quantity]);
 
   const whatsappMessage = encodeURIComponent(
@@ -192,20 +192,10 @@ export default function Home() {
             href={`https://wa.me/${WHATSAPP_NUMBER}`}
             target="_blank"
             rel="noreferrer"
-            className="hidden items-center gap-2 bg-[#16161] px-5 py-3 text-sm font-bold text-black transition hover:bg-[#FF4713] sm:flex"
-          >
-            Pesan via WhatsApp
-            <ArrowUpRight />
-          </a>
-
-          <a
-            href={`https://wa.me/${WHATSAPP_NUMBER}`}
-            target="_blank"
-            rel="noreferrer"
-            className="flex h-10 w-10 items-center justify-center bg-[#16161A] text-white sm:hidden"
+            className="flex items-center px-2 py-2 text-xs font-bold text-[#16161A] transition hover:text-[#FF4713] sm:px-5 sm:py-3 sm:text-sm"
             aria-label="Pesan via WhatsApp"
           >
-            <ArrowUpRight />
+            <span>Pesan via WhatsApp</span>
           </a>
         </div>
       </header>
@@ -431,8 +421,9 @@ export default function Home() {
                 key={product.name}
                 className="group border border-[#16161A]/10 bg-white transition duration-300 hover:-translate-y-1 hover:border-[#16161A]/30"
               >
-                <div
-                  className={`relative aspect-[4/3] overflow-hidden ${product.color}`}
+                <Link
+                  href={`/produk/${product.name.toLowerCase().replace(/\s+/g, "-")}`}
+                  className={`relative block aspect-[4/3] overflow-hidden ${product.color}`}
                 >
                   <PrintMark className="left-4 top-4 text-[#16161A]/25" />
                   <PrintMark className="right-4 top-4 text-[#16161A]/25" />
@@ -460,7 +451,7 @@ export default function Home() {
                   <div className="absolute bottom-4 left-4 bg-[#16161A] px-2 py-1 text-[9px] font-black uppercase tracking-[0.15em] text-white">
                     {product.category}
                   </div>
-                </div>
+                </Link>
 
                 <div className="p-6">
                   <div className="flex items-start justify-between gap-4">
@@ -598,15 +589,24 @@ export default function Home() {
                       type="number"
                       min="1"
                       value={quantity}
-                      onChange={(e) =>
-                        setQuantity(Math.max(1, Number(e.target.value)))
-                      }
+                      onChange={(e) => {
+                        const value = e.target.value;
+
+                        if (value === "") {
+                          setQuantity(1);
+                          return;
+                        }
+                      
+                       setQuantity(Math.max(1, Number(value)));
+                    }}
                       className="w-full border-x border-[#16161A]/10 bg-transparent px-4 text-center text-sm font-black outline-none"
                     />
 
                     <button
                       type="button"
-                      onClick={() => setQuantity((current) => current + 1)}
+                      onClick={() =>
+                        setQuantity((current) => Math.max(1, current - 1))
+                      }
                       className="w-14 text-xl font-bold transition hover:bg-[#16161A] hover:text-white"
                     >
                       +
