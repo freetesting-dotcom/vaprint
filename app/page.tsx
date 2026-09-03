@@ -1,78 +1,32 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
-import Image from 'next/image'
+import {
+  FormEvent,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
+import { products } from "../data/products";
 
 const WHATSAPP_NUMBER = "6285802506149";
 
-const products = [
-  {
-    name: "Banner",
-    category: "Outdoor & Event",
-    price: "Mulai Rp23.000",
-    description: "Banner untuk promosi, event, toko, dan kebutuhan outdoor.",
-    size: "100 × 50 cm",
-    color: "bg-orange-100",
-  },
-  {
-    name: "Sticker",
-    category: "Promosi & Branding",
-    price: "Mulai Rp10.000",
-    description: "Sticker custom untuk kemasan, branding, dan kebutuhan promosi.",
-    size: "A3+",
-    color: "bg-orange-100",
-  },
-  {
-    name: "Brosur",
-    category: "Promosi",
-    price: "Mulai Rp75.000",
-    description: "Brosur informatif untuk promosi produk dan layanan.",
-    size: "A5",
-    color: "bg-orange-100",
-  },
-  {
-    name: "Poster",
-    category: "Promosi & Event",
-    price: "Mulai Rp8.000",
-    description: "Poster dengan tampilan tajam untuk event dan promosi.",
-    size: "A3+",
-    color: "bg-orange-100",
-  },
-];
-
-const calculatorProducts = [
-  { name: "Banner", price: 23000 },
-  { name: "Sticker", price: 10000 },
-  { name: "Brosur", price: 75000 },
-  { name: "Poster", price: 8000 },
-];
-
-function ArrowUpRight() {
+function ArrowRight({ className = "" }: { className?: string }) {
   return (
     <svg
+      className={className}
       width="18"
       height="18"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
-    >
-      <path d="M7 17 17 7" />
-      <path d="M7 7h10v10" />
-    </svg>
-  );
-}
-
-function ArrowRight() {
-  return (
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
     >
       <path d="M5 12h14" />
       <path d="m13 6 6 6-6 6" />
@@ -80,7 +34,27 @@ function ArrowRight() {
   );
 }
 
-function CheckIcon() {
+function ArrowUpRight({ className = "" }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M7 17 17 7" />
+      <path d="M7 7h10v10" />
+    </svg>
+  );
+}
+
+function XIcon() {
   return (
     <svg
       width="18"
@@ -88,749 +62,952 @@ function CheckIcon() {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2.5"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      aria-hidden="true"
     >
-      <path d="m5 12 4 4L19 6" />
+      <path d="M6 6l12 12" />
+      <path d="M18 6 6 18" />
     </svg>
   );
 }
 
-function PrintMark({ className = "" }: { className?: string }) {
+function PlusMark() {
   return (
-    <span
-      className={`pointer-events-none absolute h-5 w-5 ${className}`}
-      aria-hidden="true"
-    >
-      <span className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-current" />
-      <span className="absolute left-0 top-1/2 h-px w-full -translate-y-1/2 bg-current" />
+    <span className="plus-mark" aria-hidden="true">
+      <span />
+      <span />
     </span>
   );
 }
 
-function VaPrintMark() {
+function Eyebrow({
+  children,
+  light = false,
+}: {
+  children: ReactNode;
+  light?: boolean;
+}) {
   return (
-    <div className="flex h-9 w-9 items-center justify-center border border-[#16161A] bg-[#FF4713]">
-      <div className="relative h-5 w-5">
-        <span className="absolute left-1/2 top-0 h-full w-[2px] -translate-x-1/2 bg-[#16161A]" />
-        <span className="absolute left-0 top-1/2 h-[2px] w-full -translate-y-1/2 bg-[#16161A]" />
-        <span className="absolute left-1 top-1 h-1.5 w-1.5 rounded-full bg-[#16161A]" />
-      </div>
+    <div className={`eyebrow ${light ? "eyebrow-light" : ""}`}>
+      <span className="eyebrow-dot" />
+      {children}
     </div>
   );
 }
 
-export default function Home() {
-  const [selectedProduct, setSelectedProduct] = useState("Banner");
-  const [quantity, setQuantity] = useState(1);
-
-  const estimatedPrice = useMemo(() => {
-    const product = calculatorProducts.find(
-      (item) => item.name === selectedProduct
-    );
-
-    if (!product) return 0;
-
-    return Number(product.price) * quantity;
-  }, [selectedProduct, quantity]);
-
-  const whatsappMessage = encodeURIComponent(
-    `Halo VaPrint, saya ingin konsultasi dan memesan produk ${selectedProduct}. Estimasi jumlah: ${quantity} pcs.`
+function Reveal({
+  children,
+  className = "",
+  delay = 0,
+}: {
+  children: ReactNode;
+  className?: string;
+  delay?: number;
+}) {
+  return (
+    <div
+      className={`reveal ${className}`}
+      style={{ ["--reveal-delay" as string]: `${delay}ms` }}
+    >
+      {children}
+    </div>
   );
+}
+
+function PillButton({
+  href,
+  children,
+  dark = false,
+  onClick,
+}: {
+  href?: string;
+  children: ReactNode;
+  dark?: boolean;
+  onClick?: () => void;
+}) {
+  const className = `pill-button ${dark ? "pill-button-dark" : ""}`;
+
+  if (href) {
+    return (
+      <a href={href} className={className}>
+        {children}
+        <ArrowRight className="pill-arrow" />
+      </a>
+    );
+  }
 
   return (
-    <main className="min-h-screen overflow-hidden bg-[#FAF9F6] text-[#16161A]">
-      {/* ================= NAVBAR ================= */}
-      <header className="sticky top-0 z-50 border-b border-[#16161A]/10 bg-[#FAF9F6]/95 backdrop-blur">
-        <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-5 lg:px-8">
-          <a href="#" className="flex items-center gap-3">
+    <button type="button" onClick={onClick} className={className}>
+      {children}
+      <ArrowRight className="pill-arrow" />
+    </button>
+  );
+}
+
+export default function Home() {
+  const [selectedProduct, setSelectedProduct] = useState(
+    products[0]?.id ?? "banner"
+  );
+  const [bannerWidth, setBannerWidth] = useState(1);
+  const [bannerHeight, setBannerHeight] = useState(1);
+  const [quantity, setQuantity] = useState(1);
+
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [contactOpen, setContactOpen] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [contactName, setContactName] = useState("");
+  const [contactEmail, setContactEmail] = useState("");
+  const [contactMessage, setContactMessage] = useState("");
+
+  const nameRef = useRef<HTMLInputElement>(null);
+
+  const calculatorProduct = useMemo(
+    () =>
+      products.find((item) => item.id === selectedProduct) ??
+      products[0] ??
+      null,
+    [selectedProduct]
+  );
+
+  const isBanner = calculatorProduct?.id === "banner";
+  const safeQuantity = Math.max(1, quantity || 1);
+  const safeWidth = Math.max(0.1, bannerWidth || 0.1);
+  const safeHeight = Math.max(0.1, bannerHeight || 0.1);
+
+  const estimatedPrice = useMemo(() => {
+    if (!calculatorProduct) return 0;
+
+    if (calculatorProduct.id === "banner") {
+      return Math.ceil(
+        safeWidth * safeHeight * calculatorProduct.price * safeQuantity
+      );
+    }
+
+    return calculatorProduct.price * safeQuantity;
+  }, [calculatorProduct, safeHeight, safeQuantity, safeWidth]);
+
+  const quickWhatsAppMessage = encodeURIComponent(
+    [
+      "Halo VaPrint, saya ingin konsultasi dan memesan produk.",
+      "",
+      `Produk: ${calculatorProduct?.name ?? "-"}`,
+      isBanner
+        ? `Ukuran: ${safeWidth} × ${safeHeight} meter`
+        : `Ukuran: ${calculatorProduct?.size ?? "-"}`,
+      `Jumlah: ${safeQuantity}`,
+      `Estimasi harga: Rp${estimatedPrice.toLocaleString("id-ID")}`,
+      "",
+      "Mohon informasi lebih lanjut mengenai pesanan saya.",
+    ].join("\n")
+  );
+
+  const quickWhatsAppUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${quickWhatsAppMessage}`;
+
+  useEffect(() => {
+    const items = Array.from(
+      document.querySelectorAll<HTMLElement>(".reveal")
+    );
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    if (reduced) {
+      items.forEach((item) => item.classList.add("is-visible"));
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" }
+    );
+
+    items.forEach((item) => observer.observe(item));
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const previous = document.body.style.overflow;
+
+    if (menuOpen || contactOpen) {
+      document.body.style.overflow = "hidden";
+    }
+
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, [menuOpen, contactOpen]);
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      setMenuOpen(false);
+      setContactOpen(false);
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
+
+  useEffect(() => {
+    if (!contactOpen) return;
+
+    const timer = window.setTimeout(() => nameRef.current?.focus(), 120);
+    return () => window.clearTimeout(timer);
+  }, [contactOpen]);
+
+  const scrollTo = (id: string) => {
+    setMenuOpen(false);
+    window.setTimeout(() => {
+      document
+        .getElementById(id)
+        ?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 60);
+  };
+
+  const openContact = () => {
+    setMenuOpen(false);
+    setSubmitted(false);
+    setSending(false);
+    setContactOpen(true);
+  };
+
+  const closeContact = () => {
+    setContactOpen(false);
+
+    window.setTimeout(() => {
+      setContactName("");
+      setContactEmail("");
+      setContactMessage("");
+      setSubmitted(false);
+      setSending(false);
+    }, 350);
+  };
+
+  const submitContact = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setSending(true);
+
+    const message = encodeURIComponent(
+      [
+        "Halo VaPrint, saya ingin konsultasi.",
+        "",
+        `Nama: ${contactName.trim()}`,
+        `Email: ${contactEmail.trim()}`,
+        "",
+        "Kebutuhan cetak:",
+        contactMessage.trim(),
+      ].join("\n")
+    );
+
+    window.setTimeout(() => {
+      window.open(
+        `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`,
+        "_blank",
+        "noopener,noreferrer"
+      );
+      setSending(false);
+      setSubmitted(true);
+    }, 450);
+  };
+
+  return (
+    <main className="site-shell">
+      <section className="hero-card" id="top">
+        <div className="hero-orb hero-orb-one" />
+        <div className="hero-orb hero-orb-two" />
+
+        <header className="site-header">
+          <button
+            type="button"
+            className="brand-link"
+            onClick={() => scrollTo("top")}
+            aria-label="VaPrint home"
+          >
             <Image
-            src="/vaprint.png"
-            alt="Logo VaPrint"
-            width={36}
-            height={36}
-            className="h-9 w-auto object-contain"
+              src="/vaprint.png"
+              alt="Logo VaPrint"
+              width={40}
+              height={40}
+              className="brand-logo"
+              priority
             />
+            <span className="brand-copy">
+              <strong>VaPrint</strong>
+              <small>Digital Printing Online</small>
+            </span>
+          </button>
 
-            <div className="leading-none">
-              <div className="text-[19px] font-black tracking-[-0.04em]">
-                VaPrint
-              </div>
-              <div className="mt-1 text-[8px] font-semibold uppercase tracking-[0.18em] text-[#16161A]/50">
-                Digital Printing Online
-              </div>
-            </div>
-          </a>
-
-          <nav className="hidden items-center gap-8 text-sm font-semibold md:flex">
-            <Link
-              href="#produk"
-              className="transition hover:text-[#FF4713]"
-            >
-              Produk
-            </Link>
-            <a
-              href="#kalkulator"
-              className="transition hover:text-[#FF4713]"
-            >
-              Kalkulator Harga
-            </a>
-            <a
-              href="#cara-order"
-              className="transition hover:text-[#FF4713]"
-            >
-              Cara Order
-            </a>
-            <a
-              href="#kenapa-vaprint"
-              className="transition hover:text-[#FF4713]"
-            >
-              Tentang
-            </a>
+          <nav className="desktop-nav" aria-label="Main navigation">
+            <a href="#produk">Produk</a>
+            <a href="#kalkulator">Kalkulator Harga</a>
+            <a href="#cara-order">Cara Order</a>
+            <a href="#kenapa-vaprint">Tentang</a>
           </nav>
 
-          <a
-            href={`https://wa.me/${WHATSAPP_NUMBER}`}
-            target="_blank"
-            rel="noreferrer"
-            className="flex items-center px-2 py-2 text-xs font-bold text-[#16161A] transition hover:text-[#FF4713] sm:px-5 sm:py-3 sm:text-sm"
-            aria-label="Pesan via WhatsApp"
-          >
-            <span>Pesan via WhatsApp</span>
-          </a>
-        </div>
-      </header>
+          <div className="header-actions">
+            <button
+              type="button"
+              className="header-visit"
+              onClick={openContact}
+            >
+              Konsultasi
+            </button>
+            <button
+              type="button"
+              className="menu-button"
+              onClick={() => setMenuOpen(true)}
+              aria-label="Buka menu"
+              aria-expanded={menuOpen}
+            >
+              <span />
+              <span />
+            </button>
+          </div>
+        </header>
 
-      {/* ================= HERO ================= */}
-      <section className="relative border-b border-[#16161A]/10">
-        <PrintMark className="left-[7%] top-12 text-[#16161A]/20" />
-        <PrintMark className="right-[8%] top-20 text-[#FF4713]/40" />
-
-        <div className="mx-auto grid max-w-7xl items-center gap-14 px-5 py-16 lg:grid-cols-[1.05fr_.95fr] lg:px-8 lg:py-24">
-          <div>
-            <div className="mb-7 inline-flex items-center gap-2 border border-[#16161A]/15 bg-white px-3 py-2 text-[11px] font-bold uppercase tracking-[0.16em]">
-              <span className="h-2 w-2 rounded-full bg-[#FF4713]" />
-              Digital Printing Online
-            </div>
-
-            <h1 className="max-w-4xl text-[clamp(3.2rem,7vw,6.5rem)] font-black leading-[0.88] tracking-[-0.065em]">
-              Cetak,
-              <br />
-              tapi harganya
-              <br />
-              <span className="text-[#FF4713]">kelihatan duluan.</span>
+        <div className="hero-content">
+          <Reveal className="hero-copy">
+            <Eyebrow light>Digital printing online</Eyebrow>
+            <h1>
+              <span>Cetak.</span>
+              <span>Buat terlihat.</span>
+              <span>Siap dipakai.</span>
             </h1>
-
-            <p className="mt-8 max-w-xl text-base leading-7 text-[#16161A]/65 md:text-lg">
-              Temukan kebutuhan printing Anda, lihat estimasi harga, lalu
-              pesan langsung melalui WhatsApp. Sederhana tanpa proses checkout
+            <p>
+              Temukan kebutuhan printing Anda, lihat estimasi harga, lalu pesan
+              langsung lewat WhatsApp. Sederhana, transparan, tanpa checkout
               yang ribet.
             </p>
-
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-              <Link
-                href="#produk"
-                className="inline-flex items-center justify-center gap-3 bg-[#FF4713] px-6 py-4 text-sm font-black text-white transition hover:bg-[#16161A]"
-              >
-                Lihat Produk
-                <ArrowRight />
-              </Link>
-
-              <a
-                href="#kalkulator"
-                className="inline-flex items-center justify-center gap-3 border border-[#16161A]/20 bg-white px-6 py-4 text-sm font-black transition hover:border-[#16161A]"
-              >
-                Hitung Harga
-                <ArrowRight />
-              </a>
+            <div className="hero-buttons">
+              <PillButton href="#produk">Lihat produk</PillButton>
+              <PillButton href="#kalkulator" dark>
+                Hitung harga
+              </PillButton>
             </div>
+          </Reveal>
 
-            <div className="mt-9 flex flex-wrap gap-x-6 gap-y-3 text-xs font-semibold text-[#16161A]/55">
-              <span className="flex items-center gap-2">
-                <CheckIcon />
-                Harga transparan
+          <Reveal className="hero-visual" delay={160}>
+            <div className="visual-frame">
+              <PlusMark />
+              <span className="crop crop-a">
+                <i />
               </span>
-              <span className="flex items-center gap-2">
-                <CheckIcon />
-                Konsultasi langsung
+              <span className="crop crop-b">
+                <i />
               </span>
-              <span className="flex items-center gap-2">
-                <CheckIcon />
-                Pesan via WhatsApp
+              <span className="crop crop-c">
+                <i />
               </span>
+              <span className="crop crop-d">
+                <i />
+              </span>
+
+              <Image
+                src="/ikon.png"
+                alt="VaPrint Digital Printing"
+                width={900}
+                height={700}
+                className="hero-print-image"
+                priority
+              />
+              
+              <div className="ready-sticker">Siap Cetak</div>
             </div>
-          </div>
-
-          {/* HERO PRINT VISUAL */}
-          <div className="relative mx-auto w-full max-w-[580px]">
-            <div className="relative aspect-square border border-[#16161A]/15 bg-[#F0EEE9] p-5 sm:p-8">
-              <PrintMark className="-left-3 -top-3 text-[#16161A]/60" />
-              <PrintMark className="-right-3 -top-3 text-[#16161A]/60" />
-              <PrintMark className="-bottom-3 -left-3 text-[#16161A]/60" />
-              <PrintMark className="-bottom-3 -right-3 text-[#16161A]/60" />
-
-              <div className="relative flex h-full items-center justify-center overflow-hidden border border-[#16161A]/10 bg-white">
-                {/* paper stack */}
-                <div className="absolute h-[58%] w-[63%] translate-x-8 translate-y-8 rotate-[5deg] border border-[#16161A]/10 bg-[#DDD9D0]" />
-
-                <div className="absolute h-[58%] w-[63%] -translate-x-2 translate-y-3 rotate-[-4deg] border border-[#16161A]/10 bg-[#FAF9F6]" />
-
-                <div className="relative h-[58%] w-[63%] -rotate-[2deg] border border-[#16161A] bg-white p-5 shadow-[18px_18px_0_#16161A] sm:p-7">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <div className="text-[10px] font-black uppercase tracking-[0.2em] text-[#16161A]/45">
-                        VaPrint
-                      </div>
-                      <div className="mt-3 text-2xl font-black tracking-[-0.05em] sm:text-3xl">
-                        PRINT
-                        <br />
-                        READY.
-                      </div>
-                    </div>
-
-                    <div className="border border-[#16161A] px-2 py-1 text-[8px] font-black uppercase tracking-widest">
-                      CMYK
-                    </div>
-                  </div>
-
-                  <div className="absolute bottom-7 left-7 right-7">
-                    <div className="h-3 bg-[#16161A]" />
-                    <div className="mt-2 grid grid-cols-4 gap-1">
-                      <div className="h-2 bg-cyan-400" />
-                      <div className="h-2 bg-pink-500" />
-                      <div className="h-2 bg-yellow-300" />
-                      <div className="h-2 bg-[#16161A]" />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="absolute bottom-5 right-5 bg-[#FF4713] px-3 py-2 text-[9px] font-black uppercase tracking-[0.16em] text-white sm:bottom-8 sm:right-8">
-                  Siap Cetak
-                </div>
-              </div>
+            <div className="visual-note">
+              <span /> Print with purpose.
             </div>
+          </Reveal>
+        </div>
 
-            <div className="absolute -bottom-5 -left-4 bg-[#16161A] px-4 py-3 text-xs font-bold text-white shadow-lg sm:-left-8">
-              <span className="mr-2 text-[#FF4713]">●</span>
-              Print with purpose.
-            </div>
+        <div className="hero-bottom">
+          <div className="hero-bottom-meta">
+            <span className="live-dot" /> Harga transparan · Konsultasi
+            langsung · WhatsApp
           </div>
         </div>
       </section>
 
-      {/* ================= MARQUEE / STATEMENT ================= */}
-      <section className="border-b border-[#16161A]/10 bg-[#16161A] text-white">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-6 px-5 py-7 lg:px-8">
-          <p className="text-xl font-black tracking-[-0.03em] sm:text-2xl">
-            Dari ide di layar → jadi sesuatu yang bisa dipegang.
-          </p>
-
-          <div className="flex items-center gap-4 text-xs font-bold uppercase tracking-[0.15em] text-white/50">
-            <span className="h-2 w-2 bg-[#FF4713]" />
-            VaPrint / Digital Printing
-          </div>
+      <section className="statement-band">
+        <div>
+          <span className="statement-kicker">VaPrint / 2026</span>
+          <p>Dari ide di layar → jadi sesuatu yang bisa dipegang.</p>
         </div>
+        <span className="statement-arrow">01 — 08</span>
       </section>
 
-      {/* ================= WHY VAPRINT ================= */}
-      <section id="kenapa-vaprint" className="border-b border-[#16161A]/10">
-        <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-24">
-          <div className="grid gap-12 lg:grid-cols-[.7fr_1.3fr]">
-            <div>
-              <p className="mb-4 text-xs font-black uppercase tracking-[0.2em] text-[#FF4713]">
-                Kenapa VaPrint
-              </p>
+      <section id="kenapa-vaprint" className="section section-light">
+        <div className="section-grid-two">
+          <Reveal>
+            <Eyebrow>Kenapa VaPrint</Eyebrow>
+            <h2>
+              Printing tidak harus terasa <span>rumit.</span>
+            </h2>
+            <p className="section-lead">
+              Kami membuat proses mencari produk, memahami harga, dan melakukan
+              pemesanan menjadi lebih sederhana — tanpa mengorbankan tampilan
+              dan hasil akhir.
+            </p>
+          </Reveal>
 
-              <h2 className="max-w-md text-4xl font-black leading-[0.95] tracking-[-0.055em] sm:text-5xl">
-                Printing tidak harus terasa rumit.
-              </h2>
-
-              <p className="mt-6 max-w-md text-sm leading-6 text-[#16161A]/60">
-                Kami membuat proses mencari produk, memahami harga, dan
-                melakukan pemesanan menjadi lebih sederhana.
-              </p>
-            </div>
-
-            <div className="grid gap-px border border-[#16161A]/10 bg-[#16161A]/10 sm:grid-cols-2">
-              {[
-                {
-                  number: "01",
-                  title: "Harga transparan",
-                  text: "Lihat estimasi harga sebelum menghubungi kami.",
-                },
-                {
-                  number: "02",
-                  title: "Tidak ribet",
-                  text: "Tidak perlu membuat akun atau melewati checkout panjang.",
-                },
-                {
-                  number: "03",
-                  title: "Bisa konsultasi",
-                  text: "Punya kebutuhan khusus? Langsung diskusikan dengan kami.",
-                },
-                {
-                  number: "04",
-                  title: "Fokus kualitas",
-                  text: "Setiap kebutuhan printing diproses dengan perhatian pada hasil.",
-                },
-              ].map((item) => (
-                <div
-                  key={item.number}
-                  className="bg-[#FAF9F6] p-7 transition hover:bg-white"
-                >
-                  <div className="mb-12 text-xs font-black text-[#FF4713]">
-                    {item.number}
-                  </div>
-
-                  <h3 className="text-xl font-black tracking-[-0.03em]">
-                    {item.title}
-                  </h3>
-
-                  <p className="mt-3 text-sm leading-6 text-[#16161A]/55">
-                    {item.text}
-                  </p>
+          <div className="benefit-grid">
+            {[
+              [
+                "01",
+                "Harga transparan",
+                "Lihat estimasi harga sebelum menghubungi kami.",
+              ],
+              [
+                "02",
+                "Tidak ribet",
+                "Tidak perlu akun dan tidak ada checkout panjang.",
+              ],
+              [
+                "03",
+                "Bisa konsultasi",
+                "Kebutuhan khusus? Langsung diskusikan dengan tim.",
+              ],
+              [
+                "04",
+                "Fokus kualitas",
+                "Setiap pesanan diperhatikan dari file sampai hasil.",
+              ],
+            ].map(([number, title, text], index) => (
+              <Reveal key={number} delay={index * 90}>
+                <div className="benefit-card">
+                  <div className="benefit-number">{number}</div>
+                  <h3>{title}</h3>
+                  <p>{text}</p>
+                  <span className="benefit-arrow">
+                    <ArrowUpRight />
+                  </span>
                 </div>
-              ))}
-            </div>
+              </Reveal>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ================= PRODUCTS ================= */}
-      <section id="produk" className="border-b border-[#16161A]/10">
-        <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-24">
-          <div className="mb-12 flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
-            <div>
-              <p className="mb-4 text-xs font-black uppercase tracking-[0.2em] text-[#FF4713]">
-                Produk
-              </p>
-
-              <h2 className="text-4xl font-black tracking-[-0.055em] sm:text-5xl">
-                Yang paling sering dicetak.
-              </h2>
-            </div>
-
-            <p className="max-w-sm text-sm leading-6 text-[#16161A]/55">
+      <section id="produk" className="section section-surface overlap-section">
+        <div className="section-head">
+          <Reveal>
+            <Eyebrow>Produk unggulan</Eyebrow>
+            <h2>
+              Yang paling sering <span>dicetak.</span>
+            </h2>
+          </Reveal>
+          <Reveal delay={100}>
+            <p className="section-sidecopy">
               Pilih kebutuhan Anda. Untuk ukuran atau spesifikasi khusus,
               langsung konsultasikan dengan tim VaPrint.
             </p>
-          </div>
+          </Reveal>
+        </div>
 
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {products.map((product, index) => (
-              <article
-                key={product.name}
-                className="group border border-[#16161A]/10 bg-white transition duration-300 hover:-translate-y-1 hover:border-[#16161A]/30"
-              >
+        <div className="products-grid">
+          {products.slice(0, 4).map((product, index) => (
+            <Reveal key={product.id} delay={index * 90}>
+              <article className="product-card">
                 <Link
-                  href={`/produk/${product.name.toLowerCase().replace(/\s+/g, "-")}`}
-                  className={`relative block aspect-[4/3] overflow-hidden ${product.color}`}
+                  href={`/produk/${product.id}`}
+                  className="product-visual"
                 >
-                  <PrintMark className="left-4 top-4 text-[#16161A]/25" />
-                  <PrintMark className="right-4 top-4 text-[#16161A]/25" />
-
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div
-                      className={`relative flex h-[55%] w-[64%] items-center justify-center border border-[#16161A]/20 bg-white shadow-[10px_10px_0_#16161A] transition duration-300 group-hover:-translate-y-2 group-hover:shadow-[14px_14px_0_#FF4713] ${
-                        index % 2 === 0 ? "rotate-[-4deg]" : "rotate-[3deg]"
-                      }`}
-                    >
-                      <div className="text-center">
-                        <div className="text-[9px] font-black uppercase tracking-[0.2em] text-[#16161A]/35">
-                          VaPrint
-                        </div>
-                        <div className="mt-2 text-2xl font-black tracking-[-0.06em] sm:text-3xl">
-                          {product.name}
-                        </div>
-                        <div className="mt-2 text-[9px] font-bold uppercase tracking-[0.15em] text-[#FF4713]">
-                          {product.size}
-                        </div>
-                      </div>
-                    </div>
+                  <div className={`product-swatch swatch-${index + 1}`} />
+                  <div
+                    className={`mini-sheet ${
+                      index % 2 === 0 ? "tilt-left" : "tilt-right"
+                    }`}
+                  >
+                    <span>VaPrint</span>
+                    <strong>
+                      {product.name.replace(" / Spanduk", "")}
+                    </strong>
+                    <small>{product.size}</small>
                   </div>
-
-                  <div className="absolute bottom-4 left-4 bg-[#16161A] px-2 py-1 text-[9px] font-black uppercase tracking-[0.15em] text-white">
-                    {product.category}
-                  </div>
+                  {product.popular && (
+                    <span className="popular-tag">Populer</span>
+                  )}
+                  <span className="corner-plus">
+                    <PlusMark />
+                  </span>
                 </Link>
 
-                <div className="p-6">
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <h3 className="text-xl font-black tracking-[-0.03em]">
-                        {product.name}
-                      </h3>
-                      <p className="mt-2 text-sm leading-6 text-[#16161A]/55">
-                        {product.description}
-                      </p>
-                    </div>
-
-                    <span className="shrink-0 text-[#FF4713]">
-                      <ArrowUpRight />
-                    </span>
+                <div className="product-body">
+                  <div className="product-topline">
+                    <span>{product.category}</span>
+                    <ArrowUpRight />
                   </div>
-
-                  <div className="mt-6 flex items-end justify-between border-t border-[#16161A]/10 pt-4">
-                    <div>
-                      <div className="text-[9px] font-bold uppercase tracking-wider text-[#16161A]/40">
-                        Harga
-                      </div>
-                      <div className="mt-1 text-sm font-black">
-                        {product.price}
-                      </div>
-                    </div>
-
-                    <Link
-                       href={`/produk/${product.name.toLowerCase().replace(/\s+/g, "-")}`}
-                      className="text-xs font-black underline decoration-[#FF4713] decoration-2 underline-offset-4"
-                    >
-                      Hitung
+                  <h3>{product.name}</h3>
+                  <p>{product.description}</p>
+                  <div className="product-footer">
+                    <span>{product.priceLabel}</span>
+                    <Link href={`/produk/${product.id}`}>
+                      Hitung <ArrowRight />
                     </Link>
                   </div>
                 </div>
               </article>
-            ))}
-          </div>
+            </Reveal>
+          ))}
+        </div>
 
-          <div className="mt-8 flex justify-center">
-            <Link
-              href="#kalkulator"
-              className="inline-flex items-center gap-2 border border-[#16161A]/20 bg-white px-6 py-3 text-sm font-bold transition hover:border-[#16161A]"
-            >
-              Lihat & hitung semua produk
-              <ArrowRight />
-            </Link>
-          </div>
+        <div className="center-action">
+          <PillButton href="/produk" dark>
+            Lihat semua produk
+          </PillButton>
         </div>
       </section>
 
-      {/* ================= CALCULATOR ================= */}
-      <section id="kalkulator" className="border-b border-[#16161A]/10 bg-[#F0EEE9]">
-        <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-24">
-          <div className="grid gap-12 lg:grid-cols-[.85fr_1.15fr] lg:items-center">
-            <div>
-              <p className="mb-4 text-xs font-black uppercase tracking-[0.2em] text-[#FF4713]">
-                Kalkulator Harga
-              </p>
-
-              <h2 className="max-w-lg text-4xl font-black leading-[0.95] tracking-[-0.055em] sm:text-5xl">
-                Tahu kisaran harganya sebelum chat.
-              </h2>
-
-              <p className="mt-6 max-w-md text-sm leading-6 text-[#16161A]/60">
-                Gunakan kalkulator sederhana ini untuk mendapatkan estimasi
-                awal. Harga final dapat berubah sesuai bahan, ukuran, finishing,
-                dan spesifikasi produksi.
-              </p>
-            </div>
-
-            <div className="border border-[#16161A] bg-[#FAF9F6] p-6 shadow-[12px_12px_0_#16161A] sm:p-8">
-              <div className="mb-8 flex items-center justify-between border-b border-[#16161A]/10 pb-5">
-                <div>
-                  <div className="text-[10px] font-black uppercase tracking-[0.18em] text-[#16161A]/40">
-                    Quick Estimate
-                  </div>
-                  <div className="mt-1 text-lg font-black">
-                    Estimasi cetak
-                  </div>
-                </div>
-
-                <div className="flex gap-1">
-                  <span className="h-3 w-3 bg-cyan-400" />
-                  <span className="h-3 w-3 bg-pink-500" />
-                  <span className="h-3 w-3 bg-yellow-300" />
-                  <span className="h-3 w-3 bg-[#16161A]" />
-                </div>
-              </div>
-
-              <div className="space-y-6">
-                <div>
-                  <label
-                    htmlFor="product"
-                    className="mb-2 block text-xs font-black uppercase tracking-wider"
-                  >
-                    Produk
-                  </label>
-
-                  <select
-                    id="product"
-                    value={selectedProduct}
-                    onChange={(e) => setSelectedProduct(e.target.value)}
-                    className="w-full appearance-none border border-[#16161A]/20 bg-white px-4 py-4 text-sm font-bold outline-none transition focus:border-[#FF4713]"
-                  >
-                    {calculatorProducts.map((product) => (
-                      <option key={product.name} value={product.name}>
-                        {product.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="quantity"
-                    className="mb-2 block text-xs font-black uppercase tracking-wider"
-                  >
-                    Jumlah
-                  </label>
-
-                  <div className="flex border border-[#16161A]/20 bg-white">
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setQuantity((current) => Math.max(1, current - 1))
-                      }
-                      className="w-14 text-xl font-bold transition hover:bg-[#16161A] hover:text-white"
-                    >
-                      −
-                    </button>
-
-                    <input
-                      id="quantity"
-                      type="number"
-                      min="1"
-                      value={quantity}
-                      onChange={(e) => {
-                        const value = e.target.value;
-
-                        if (value === "") {
-                          setQuantity(1);
-                          return;
-                        }
-                      
-                       setQuantity(Math.max(1, Number(value)));
-                    }}
-                      className="w-full border-x border-[#16161A]/10 bg-transparent px-4 text-center text-sm font-black outline-none"
-                    />
-
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setQuantity((current) => Math.max(1, current - 1))
-                      }
-                      className="w-14 text-xl font-bold transition hover:bg-[#16161A] hover:text-white"
-                    >
-                      +
-                    </button>
-                  </div>
-                </div>
-
-                <div className="border-t border-[#16161A]/10 pt-6">
-                  <div className="flex items-end justify-between gap-4">
-                    <div>
-                      <div className="text-xs font-bold text-[#16161A]/45">
-                        Estimasi mulai dari
-                      </div>
-
-                      <div className="mt-1 text-3xl font-black tracking-[-0.04em]">
-                        Rp{estimatedPrice.toLocaleString("id-ID")}
-                      </div>
-                    </div>
-
-                    <div className="text-right text-[10px] font-bold uppercase tracking-wider text-[#16161A]/40">
-                      *Estimasi
-                    </div>
-                  </div>
-                </div>
-
-                <a
-                  href={`https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappMessage}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex w-full items-center justify-center gap-2 bg-[#FF4713] px-5 py-4 text-sm font-black text-white transition hover:bg-[#16161A]"
-                >
-                  Lanjut konsultasi via WhatsApp
-                  <ArrowUpRight />
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ================= ORDER PROCESS ================= */}
-      <section id="cara-order" className="border-b border-[#16161A]/10">
-        <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-24">
-          <div className="mb-14 max-w-2xl">
-            <p className="mb-4 text-xs font-black uppercase tracking-[0.2em] text-[#FF4713]">
-              Cara Order
+      <section id="kalkulator" className="section section-dark">
+        <div className="section-grid-two calculator-layout">
+          <Reveal>
+            <Eyebrow light>Kalkulator harga</Eyebrow>
+            <h2 className="dark-title">
+              Tahu kisaran harga <span>sebelum chat.</span>
+            </h2>
+            <p className="dark-lead">
+              Gunakan kalkulator sederhana untuk mendapatkan estimasi awal.
+              Harga final dapat berubah sesuai bahan, ukuran, finishing, dan
+              spesifikasi produksi.
             </p>
+            <div className="stats-mini">
+              <div>
+                <strong>4+</strong>
+                <span>Produk populer</span>
+              </div>
+              <div>
+                <strong>WA</strong>
+                <span>Konsultasi langsung</span>
+              </div>
+              <div>
+                <strong>0</strong>
+                <span>Checkout ribet</span>
+              </div>
+            </div>
+          </Reveal>
 
-            <h2 className="text-4xl font-black leading-[0.95] tracking-[-0.055em] sm:text-5xl">
+          <Reveal delay={150}>
+            <div className="calculator-card">
+              <div className="calc-head">
+                <div>
+                  <span>Quick estimate</span>
+                  <h3>Estimasi cetak</h3>
+                </div>
+                <div className="cmyk-mini">
+                  <i />
+                  <i />
+                  <i />
+                  <i />
+                </div>
+              </div>
+
+              <label>
+                Produk
+                <select
+                  value={selectedProduct}
+                  onChange={(event) => {
+                    setSelectedProduct(event.target.value);
+                  }}
+                >
+                  {products.map((product) => (
+                    <option key={product.id} value={product.id}>
+                      {product.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              {isBanner && (
+                <div className="banner-size-fields">
+                  <label>
+                    Lebar (meter)
+                    <input
+                      type="number"
+                      min={0.1}
+                      step={0.1}
+                      value={bannerWidth}
+                      onChange={(event) =>
+                        setBannerWidth(
+                          Math.max(0.1, Number(event.target.value) || 0.1)
+                        )
+                      }
+                    />
+                  </label>
+                  <div className="banner-x">×</div>
+                  <label>
+                    Tinggi (meter)
+                    <input
+                      type="number"
+                      min={0.1}
+                      step={0.1}
+                      value={bannerHeight}
+                      onChange={(event) =>
+                        setBannerHeight(
+                          Math.max(0.1, Number(event.target.value) || 0.1)
+                        )
+                      }
+                    />
+                  </label>
+                </div>
+              )}
+
+              <label>
+                Jumlah
+                <div className="quantity-control">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setQuantity((current) => Math.max(1, current - 1))
+                    }
+                    aria-label="Kurangi jumlah"
+                  >
+                    −
+                  </button>
+                  <input
+                    aria-label="Jumlah"
+                    type="number"
+                    min={1}
+                    value={quantity}
+                    onChange={(event) =>
+                      setQuantity(
+                        Math.max(1, Number(event.target.value) || 1)
+                      )
+                    }
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setQuantity((current) => current + 1)}
+                    aria-label="Tambah jumlah"
+                  >
+                    +
+                  </button>
+                </div>
+              </label>
+
+              <div className="estimate-row">
+                <div>
+                  <span>Estimasi mulai dari</span>
+                  <strong>Rp{estimatedPrice.toLocaleString("id-ID")}</strong>
+                </div>
+                <small>
+                  {isBanner
+                    ? "berdasarkan ukuran"
+                    : `per ${calculatorProduct?.unit ?? "unit"}`}
+                </small>
+              </div>
+
+              <a
+                className="calc-submit"
+                href={quickWhatsAppUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Lanjut konsultasi via WhatsApp <ArrowUpRight />
+              </a>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      <section id="cara-order" className="section section-light">
+        <div className="section-head order-head">
+          <Reveal>
+            <Eyebrow>Cara order</Eyebrow>
+            <h2>
               Empat langkah.
               <br />
-              Selesai.
+              <span>Selesai.</span>
             </h2>
-          </div>
+          </Reveal>
+          <Reveal delay={120}>
+            <p className="section-sidecopy">
+              Dari pilih produk sampai produksi, semua dibuat sesederhana
+              mungkin.
+            </p>
+          </Reveal>
+        </div>
 
-          <div className="grid border-l border-t border-[#16161A]/10 sm:grid-cols-2 lg:grid-cols-4">
-            {[
-              {
-                number: "01",
-                title: "Pilih Produk",
-                text: "Temukan produk printing yang sesuai dengan kebutuhan Anda.",
-              },
-              {
-                number: "02",
-                title: "Hitung Estimasi",
-                text: "Gunakan kalkulator untuk melihat kisaran harga.",
-              },
-              {
-                number: "03",
-                title: "Pesan via WhatsApp",
-                text: "Kirim detail pesanan dan konsultasikan kebutuhan khusus.",
-              },
-              {
-                number: "04",
-                title: "Produksi",
-                text: "Setelah detail dikonfirmasi, pesanan masuk proses produksi.",
-              },
-            ].map((step) => (
-              <div
-                key={step.number}
-                className="group border-b border-r border-[#16161A]/10 p-7 transition hover:bg-[#16161A] hover:text-white sm:p-8 lg:min-h-[280px]"
-              >
-                <div className="flex items-start justify-between">
-                  <span className="text-xs font-black text-[#FF4713]">
-                    {step.number}
-                  </span>
-
-                  <ArrowUpRight />
+        <div className="process-grid">
+          {[
+            ["01", "Pilih Produk", "Temukan kebutuhan printing yang sesuai."],
+            ["02", "Hitung Estimasi", "Lihat kisaran harga sebelum chat."],
+            [
+              "03",
+              "Pesan via WhatsApp",
+              "Kirim detail dan konsultasikan kebutuhan.",
+            ],
+            ["04", "Produksi", "Setelah detail dikonfirmasi, kami proses."],
+          ].map(([number, title, text], index) => (
+            <Reveal key={number} delay={index * 100}>
+              <div className="process-card">
+                <span>{number}</span>
+                <div>
+                  <h3>{title}</h3>
+                  <p>{text}</p>
                 </div>
-
-                <div className="mt-20">
-                  <h3 className="text-xl font-black tracking-[-0.03em]">
-                    {step.title}
-                  </h3>
-
-                  <p className="mt-3 text-sm leading-6 text-[#16161A]/55 group-hover:text-white/55">
-                    {step.text}
-                  </p>
-                </div>
+                <ArrowUpRight />
               </div>
-            ))}
-          </div>
+            </Reveal>
+          ))}
         </div>
       </section>
 
-      {/* ================= CTA ================= */}
-      <section className="relative overflow-hidden bg-[#FF4713] text-white">
-        <PrintMark className="left-8 top-8 text-white/40" />
-        <PrintMark className="right-8 bottom-8 text-white/40" />
+      <section className="cta-section">
+        <div className="cta-decoration">
+          <PlusMark />
+        </div>
+        <Reveal>
+          <Eyebrow light>Butuh sesuatu yang spesifik?</Eyebrow>
+          <h2>
+            Ceritakan kebutuhan
+            <br />
+            <span>cetak Anda.</span>
+          </h2>
+        </Reveal>
+        <Reveal delay={140}>
+          <PillButton href={`https://wa.me/${WHATSAPP_NUMBER}`} dark>
+            Chat WhatsApp
+          </PillButton>
+        </Reveal>
+      </section>
 
-        <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
-          <div className="grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end">
-            <div>
-              <p className="mb-5 text-xs font-black uppercase tracking-[0.2em] text-white/60">
-                Butuh sesuatu yang spesifik?
-              </p>
+      <footer id="contact" className="footer-card">
+        <div className="footer-cta">
+          <div>
+            <Eyebrow light>Mulai pesan</Eyebrow>
+            <h2>
+              Siap untuk
+              <br />
+              <span>dicetak?</span>
+            </h2>
+          </div>
+          <button
+            type="button"
+            className="footer-book"
+            onClick={openContact}
+          >
+            Konsultasi <ArrowRight />
+          </button>
+        </div>
 
-              <h2 className="max-w-3xl text-5xl font-black leading-[0.9] tracking-[-0.06em] sm:text-6xl lg:text-7xl">
-                Ceritakan kebutuhan
-                <br />
-                cetak Anda.
-              </h2>
+        <div className="footer-grid">
+          <div>
+            <div className="brand-footer">
+              <Image
+                src="/vaprint.png"
+                alt="Logo VaPrint"
+                width={40}
+                height={40}
+              />
+              <div>
+                <strong>VaPrint</strong>
+                <small>Digital Printing Online</small>
+              </div>
             </div>
+            <p>
+              Solusi digital printing untuk kebutuhan personal, bisnis,
+              promosi, dan event.
+            </p>
+          </div>
 
+          <div>
+            <h3>Navigasi</h3>
+            <a href="#produk">Produk</a>
+            <a href="#kalkulator">Kalkulator Harga</a>
+            <a href="#cara-order">Cara Order</a>
+            <a href="#kenapa-vaprint">Tentang</a>
+          </div>
+
+          <div>
+            <h3>Hubungi</h3>
             <a
               href={`https://wa.me/${WHATSAPP_NUMBER}`}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center justify-center gap-3 bg-[#16161A] px-7 py-5 text-sm font-black text-white transition hover:bg-white hover:text-[#16161A]"
             >
-              Chat WhatsApp
-              <ArrowUpRight />
+              WhatsApp
             </a>
+            <a href="mailto:play@vaprint.id">play@vaprint.id</a>
+            <span>Indonesia</span>
+            <span>Digital Printing Online</span>
+          </div>
+
+          <div>
+            <h3>Explore</h3>
+            <Link href="/produk">Katalog</Link>
+            <Link href="/produk/banner">Banner</Link>
+            <Link href="/produk/brosur">Brosur</Link>
+            <Link href="/produk/sticker">Sticker</Link>
           </div>
         </div>
-      </section>
 
-      {/* ================= FOOTER ================= */}
-      <footer className="bg-[#16161A] text-white">
-        <div className="mx-auto max-w-7xl px-5 py-12 lg:px-8">
-          <div className="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr]">
-            <div>
-              <div className="flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center bg-[#FF4713]">
-                  <div className="relative h-5 w-5">
-                    <span className="absolute left-1/2 top-0 h-full w-[2px] -translate-x-1/2 bg-[#16161A]" />
-                    <span className="absolute left-0 top-1/2 h-[2px] w-full -translate-y-1/2 bg-[#16161A]" />
-                  </div>
-                </div>
-
-                <div>
-                  <div className="text-xl font-black tracking-[-0.04em]">
-                    VaPrint
-                  </div>
-                  <div className="text-[8px] font-semibold uppercase tracking-[0.18em] text-white/40">
-                    Digital Printing Online
-                  </div>
-                </div>
-              </div>
-
-              <p className="mt-5 max-w-sm text-sm leading-6 text-white/45">
-                Solusi digital printing untuk kebutuhan personal, bisnis,
-                promosi, dan event.
-              </p>
-            </div>
-
-            <div>
-              <div className="text-xs font-black uppercase tracking-[0.18em] text-white/40">
-                Navigasi
-              </div>
-
-              <div className="mt-5 space-y-3 text-sm text-white/65">
-                <a className="block hover:text-[#FF4713]" href="#produk">
-                  Produk
-                </a>
-                <a
-                  className="block hover:text-[#FF4713]"
-                  href="#kalkulator"
-                >
-                  Kalkulator Harga
-                </a>
-                <a
-                  className="block hover:text-[#FF4713]"
-                  href="#cara-order"
-                >
-                  Cara Order
-                </a>
-                <a
-                  className="block hover:text-[#FF4713]"
-                  href="#kenapa-vaprint"
-                >
-                  Tentang VaPrint
-                </a>
-              </div>
-            </div>
-
-            <div>
-              <div className="text-xs font-black uppercase tracking-[0.18em] text-white/40">
-                Hubungi
-              </div>
-
-              <div className="mt-5 space-y-3 text-sm text-white/65">
-                <a
-                  href={`https://wa.me/${WHATSAPP_NUMBER}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="block hover:text-[#FF4713]"
-                >
-                  WhatsApp
-                </a>
-
-                <p>Indonesia</p>
-                <p>Digital Printing Online</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-12 flex flex-col justify-between gap-4 border-t border-white/10 pt-6 text-xs text-white/35 sm:flex-row">
-            <p>© 2026 VaPrint. All rights reserved.</p>
-
-            <p>Print better. Print smarter.</p>
-          </div>
+        <div className="footer-bottom">
+          <span>© 2026 VaPrint. All rights reserved.</span>
+          <span>Print better. Print smarter.</span>
         </div>
       </footer>
+
+      {menuOpen && (
+        <div
+          className="overlay menu-overlay"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Menu"
+        >
+          <button
+            className="overlay-backdrop"
+            aria-label="Tutup menu"
+            onClick={() => setMenuOpen(false)}
+          />
+          <div className="menu-panel">
+            <div className="menu-top">
+              <div className="brand-footer">
+                <Image
+                  src="/vaprint.png"
+                  alt="Logo VaPrint"
+                  width={40}
+                  height={40}
+                />
+                <div>
+                  <strong>VaPrint</strong>
+                  <small>Digital Printing Online</small>
+                </div>
+              </div>
+              <button
+                className="close-circle"
+                type="button"
+                onClick={() => setMenuOpen(false)}
+                aria-label="Tutup menu"
+              >
+                <XIcon />
+              </button>
+            </div>
+
+            <div className="menu-links">
+              <button onClick={() => scrollTo("produk")}>Produk</button>
+              <button onClick={() => scrollTo("kalkulator")}>Kalkulator</button>
+              <button onClick={() => scrollTo("cara-order")}>Cara Order</button>
+              <button onClick={() => scrollTo("contact")}>Kontak</button>
+            </div>
+
+            <div className="menu-bottom">
+              <button className="footer-book" onClick={openContact}>
+                Konsultasi <ArrowRight />
+              </button>
+              <span>Instagram</span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {contactOpen && (
+        <div
+          className="overlay contact-overlay"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Form konsultasi"
+        >
+          <button
+            className="overlay-backdrop"
+            aria-label="Tutup konsultasi"
+            onClick={closeContact}
+          />
+
+          <div className="contact-panel">
+            <div className="contact-head">
+              <div>
+                <Eyebrow>Konsultasi</Eyebrow>
+                <h2>
+                  Ceritakan
+                  <br />
+                  <span>kebutuhan cetak.</span>
+                </h2>
+              </div>
+              <button
+                className="close-circle close-light"
+                type="button"
+                onClick={closeContact}
+                aria-label="Tutup konsultasi"
+              >
+                <XIcon />
+              </button>
+            </div>
+
+            {!submitted ? (
+              <form onSubmit={submitContact} className="contact-form">
+                <label>
+                  Nama lengkap
+                  <input
+                    ref={nameRef}
+                    required
+                    type="text"
+                    value={contactName}
+                    onChange={(event) => setContactName(event.target.value)}
+                    placeholder="Nama Anda"
+                  />
+                </label>
+
+                <label>
+                  Email
+                  <input
+                    required
+                    type="email"
+                    value={contactEmail}
+                    onChange={(event) => setContactEmail(event.target.value)}
+                    placeholder="anda@email.com"
+                  />
+                </label>
+
+                <label>
+                  Kebutuhan cetak
+                  <textarea
+                    required
+                    rows={4}
+                    value={contactMessage}
+                    onChange={(event) =>
+                      setContactMessage(event.target.value)
+                    }
+                    placeholder="Saya ingin mencetak banner untuk event..."
+                  />
+                </label>
+
+                <button
+                  disabled={sending}
+                  className="form-submit"
+                  type="submit"
+                >
+                  {sending ? "Membuka WhatsApp…" : "Lanjut ke WhatsApp"}
+                  <ArrowRight />
+                </button>
+              </form>
+            ) : (
+              <div className="success-panel">
+                <div className="success-icon">✓</div>
+                <h3>Pesan siap dikirim</h3>
+                <p>
+                  WhatsApp sudah dibuka dengan detail konsultasi Anda.
+                  Lanjutkan pengiriman pesan di WhatsApp untuk menghubungi tim
+                  VaPrint.
+                </p>
+                <button
+                  type="button"
+                  className="form-submit"
+                  onClick={closeContact}
+                >
+                  Selesai
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </main>
   );
 }

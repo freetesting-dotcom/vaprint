@@ -1,129 +1,301 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useMemo, useState } from "react";
 import ProductCard from "../../components/ProductCard";
 import { products } from "../../data/products";
 
+const WHATSAPP_NUMBER = "6285802506149";
+
+const filters = [
+  { label: "Semua", value: "all" },
+  { label: "Outdoor & Event", value: "Outdoor & Event" },
+  { label: "Promosi", value: "Promosi" },
+  { label: "Promosi & Event", value: "Promosi & Event" },
+  { label: "Branding", value: "Branding" },
+];
+
 export default function ProductsPage() {
+  const [activeFilter, setActiveFilter] = useState("all");
+
+  const filteredProducts = useMemo(() => {
+    if (activeFilter === "all") return products;
+    return products.filter((product) => product.category === activeFilter);
+  }, [activeFilter]);
+
+  useEffect(() => {
+    const items = Array.from(document.querySelectorAll<HTMLElement>(".reveal"));
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (reduced) {
+      items.forEach((item) => item.classList.add("is-visible"));
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -8% 0px" }
+    );
+
+    items.forEach((item) => observer.observe(item));
+    return () => observer.disconnect();
+  }, [activeFilter]);
+
+  const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}`;
+
   return (
-    <main className="min-h-screen bg-[#FAF9F6] text-[#16161A]">
-      {/* Header */}
-      <section className="border-b border-[#16161A]/10">
-        <div className="mx-auto max-w-7xl px-5 py-16 lg:px-8 lg:py-20">
-          <Link
-            href="/"
-            className="mb-10 inline-flex items-center gap-2 text-xs font-bold text-[#16161A]/50 transition hover:text-[#FF4713]"
-          >
-            ← Kembali ke Beranda
+    <main className="site-shell catalog-page">
+      <section className="catalog-hero section section-dark">
+        <div className="catalog-topbar">
+          <Link href="/" className="catalog-back">
+            <span aria-hidden="true">←</span>
+            Kembali ke beranda
           </Link>
-
-          <div className="max-w-3xl">
-            <p className="mb-4 text-xs font-black uppercase tracking-[0.2em] text-[#FF4713]">
-              Katalog VaPrint
-            </p>
-
-            <h1 className="text-5xl font-black leading-[0.9] tracking-[-0.06em] sm:text-6xl lg:text-7xl">
-              Cetak apa yang
-              <br />
-              Anda butuhkan.
-            </h1>
-
-            <p className="mt-7 max-w-xl text-base leading-7 text-[#16161A]/60">
-              Pilih produk printing yang sesuai dengan kebutuhan Anda. Lihat
-              spesifikasi, estimasi harga, dan lanjutkan pemesanan melalui
-              WhatsApp.
-            </p>
-          </div>
+          <span className="catalog-code">VaPrint / Katalog</span>
         </div>
-      </section>
 
-      {/* Filter kategori */}
-      <section className="border-b border-[#16161A]/10">
-        <div className="mx-auto flex max-w-7xl gap-2 overflow-x-auto px-5 py-5 lg:px-8">
-          <button
-            type="button"
-            className="shrink-0 bg-[#16161A] px-4 py-2 text-xs font-black text-white"
-          >
-            Semua Produk
-          </button>
+        <div className="catalog-hero-grid">
+          <div>
+            <div className="reveal">
+              <div className="eyebrow eyebrow-light">
+                <span className="eyebrow-dot" />
+                Katalog VaPrint
+              </div>
 
-          <button
-            type="button"
-            className="shrink-0 border border-[#16161A]/15 bg-white px-4 py-2 text-xs font-bold transition hover:border-[#16161A]"
-          >
-            Promosi
-          </button>
+              <h1 className="catalog-title">
+                Cetak apa yang
+                <br />
+                Anda <span>butuhkan.</span>
+              </h1>
 
-          <button
-            type="button"
-            className="shrink-0 border border-[#16161A]/15 bg-white px-4 py-2 text-xs font-bold transition hover:border-[#16161A]"
-          >
-            Business
-          </button>
-
-          <button
-            type="button"
-            className="shrink-0 border border-[#16161A]/15 bg-white px-4 py-2 text-xs font-bold transition hover:border-[#16161A]"
-          >
-            Event
-          </button>
-
-          <button
-            type="button"
-            className="shrink-0 border border-[#16161A]/15 bg-white px-4 py-2 text-xs font-bold transition hover:border-[#16161A]"
-          >
-            Branding
-          </button>
-        </div>
-      </section>
-
-      {/* Product Grid */}
-      <section>
-        <div className="mx-auto max-w-7xl px-5 py-12 lg:px-8 lg:py-16">
-          <div className="mb-8 flex items-center justify-between">
-            <p className="text-sm font-bold text-[#16161A]/50">
-              {products.length} produk tersedia
-            </p>
-
-            <p className="hidden text-xs text-[#16161A]/40 sm:block">
-              Harga dapat berubah sesuai spesifikasi
-            </p>
-          </div>
-
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {products.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="bg-[#FF4713] text-white">
-        <div className="mx-auto max-w-7xl px-5 py-16 lg:px-8">
-          <div className="flex flex-col justify-between gap-8 md:flex-row md:items-center">
-            <div>
-              <p className="text-xs font-black uppercase tracking-[0.2em] text-white/60">
-                Tidak menemukan yang dicari?
+              <p className="catalog-lead">
+                Pilih produk printing sesuai kebutuhan Anda. Lihat spesifikasi,
+                estimasi harga, lalu lanjutkan pemesanan melalui WhatsApp.
               </p>
-
-              <h2 className="mt-3 text-3xl font-black tracking-[-0.04em] sm:text-4xl">
-                Konsultasikan kebutuhan cetak Anda.
-              </h2>
             </div>
 
-            <a
-              href="https://wa.me/628XXXXXXXXXX"
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex shrink-0 items-center justify-center bg-[#16161A] px-6 py-4 text-sm font-black transition hover:bg-white hover:text-[#16161A]"
+            <div
+              className="catalog-meta reveal"
+              style={{ ["--reveal-delay" as string]: "120ms" }}
             >
-              Chat WhatsApp ↗
-            </a>
+              <div>
+                <strong>{products.length}</strong>
+                <span>produk tersedia</span>
+              </div>
+              <div>
+                <strong>WA</strong>
+                <span>konsultasi langsung</span>
+              </div>
+            </div>
+          </div>
+
+          <div
+            className="catalog-hero-art reveal"
+            style={{ ["--reveal-delay" as string]: "180ms" }}
+          >
+            <div className="catalog-art-card">
+              <div className="catalog-art-orb" />
+              <div className="catalog-art-sheet">
+                <span>VAPRINT</span>
+                <strong>
+                  PRINT
+                  <br />
+                  BETTER.
+                </strong>
+                <small>Digital Printing Online</small>
+                <div className="catalog-cmyk">
+                  <i />
+                  <i />
+                  <i />
+                  <i />
+                </div>
+              </div>
+              <div className="catalog-art-label">READY TO PRINT</div>
+            </div>
           </div>
         </div>
       </section>
+
+      <section className="section section-light catalog-products-section">
+        <div className="catalog-heading">
+          <div className="reveal">
+            <div className="eyebrow">
+              <span className="eyebrow-dot" />
+              Semua produk
+            </div>
+            <h2>
+              Pilih. Hitung.
+              <br />
+              <span>Pesan.</span>
+            </h2>
+          </div>
+
+          <div
+            className="catalog-heading-copy reveal"
+            style={{ ["--reveal-delay" as string]: "120ms" }}
+          >
+            <p>
+              Harga yang tampil merupakan harga awal. Ukuran, bahan, finishing,
+              dan jumlah dapat memengaruhi harga final.
+            </p>
+          </div>
+        </div>
+
+        <div
+          className="catalog-filters reveal"
+          style={{ ["--reveal-delay" as string]: "180ms" }}
+          role="group"
+          aria-label="Filter kategori produk"
+        >
+          {filters.map((filter) => {
+            const active = activeFilter === filter.value;
+
+            return (
+              <button
+                key={filter.value}
+                type="button"
+                className={`catalog-filter ${active ? "is-active" : ""}`}
+                onClick={() => setActiveFilter(filter.value)}
+                aria-pressed={active}
+              >
+                {filter.label}
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="catalog-results-bar">
+          <span>
+            <strong>{filteredProducts.length}</strong> produk ditampilkan
+          </span>
+          <span className="catalog-results-note">
+            Pilih produk untuk melihat kalkulator
+          </span>
+        </div>
+
+        {filteredProducts.length > 0 ? (
+          <div className="products-grid catalog-grid">
+            {filteredProducts.map((product, index) => (
+              <div
+                key={product.id}
+                className="reveal"
+                style={{
+                  ["--reveal-delay" as string]: `${index * 80}ms`,
+                }}
+              >
+                <ProductCard product={product} />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="catalog-empty reveal">
+            <span>Belum ada produk pada kategori ini.</span>
+            <button type="button" onClick={() => setActiveFilter("all")}>
+              Lihat semua produk
+            </button>
+          </div>
+        )}
+      </section>
+
+      <section className="catalog-cta">
+        <div>
+          <div className="eyebrow eyebrow-light">
+            <span className="eyebrow-dot" />
+            Tidak menemukan yang dicari?
+          </div>
+
+          <h2>
+            Punya kebutuhan
+            <br />
+            <span>khusus?</span>
+          </h2>
+        </div>
+
+        <a
+          href={whatsappUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="pill-button pill-button-dark"
+        >
+          Konsultasi via WhatsApp
+          <span className="pill-arrow">→</span>
+        </a>
+      </section>
+
+      <footer className="footer-card">
+        <div className="footer-cta">
+          <div>
+            <div className="eyebrow eyebrow-light">
+              <span className="eyebrow-dot" />
+              Mulai pesan
+            </div>
+
+            <h2>
+              Siap untuk
+              <br />
+              <span>dicetak?</span>
+            </h2>
+          </div>
+
+          <a
+            href={whatsappUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="footer-book"
+          >
+            Hubungi VaPrint <span>→</span>
+          </a>
+        </div>
+
+        <div className="footer-grid">
+          <div>
+            <div className="brand-footer">
+              <strong>VaPrint</strong>
+              <small>Digital Printing Online</small>
+            </div>
+            <p>
+              Solusi digital printing untuk kebutuhan personal, bisnis,
+              promosi, dan event.
+            </p>
+          </div>
+
+          <div>
+            <h3>Navigasi</h3>
+            <Link href="/#produk">Produk</Link>
+            <Link href="/#kalkulator">Kalkulator Harga</Link>
+            <Link href="/#cara-order">Cara Order</Link>
+            <Link href="/#kenapa-vaprint">Tentang</Link>
+          </div>
+
+          <div>
+            <h3>Hubungi</h3>
+            <a href={whatsappUrl} target="_blank" rel="noreferrer">
+              WhatsApp
+            </a>
+            <a href="mailto:play@vaprint.id">play@vaprint.id</a>
+            <span>Indonesia</span>
+          </div>
+
+          <div>
+            <h3>Explore</h3>
+            <Link href="/produk/banner">Banner</Link>
+            <Link href="/produk/brosur">Brosur</Link>
+            <Link href="/produk/poster">Poster</Link>
+            <Link href="/produk/sticker">Sticker</Link>
+          </div>
+        </div>
+
+        <div className="footer-bottom">
+          <span>© 2026 VaPrint. All rights reserved.</span>
+          <span>Print better. Print smarter.</span>
+        </div>
+      </footer>
     </main>
   );
 }
