@@ -4335,6 +4335,37 @@ textarea:focus-visible {
 }
 
 
+/* ========================================= MOBILE ========================================= */ 
+@media (max-width: 640px) { 
+  .footer-location { 
+    margin-top: 44px; 
+    padding-top: 34px; 
+    
+    grid-template-columns: 1fr; 
+  } 
+  .footer-location-heading h2 {
+    font-size: clamp(42px, 14vw, 58px); 
+  } 
+  .location-card { 
+    grid-template-columns: 1fr; 
+    min-height: auto; 
+    border-radius: 16px; 
+  } 
+  .location-map {
+    min-height: 190px; 
+  } 
+  .location-info {
+    padding: 24px; 
+  } 
+  .map-ring-one { 
+    width: 80px; height: 80px; 
+  } 
+  .map-ring-two { 
+    width: 135px; height: 135px; 
+  } 
+}
+
+
 /* =========================================================
    RESPONSIVE OVERFLOW FIX
    Menjaga UI tetap utuh tanpa mengubah tema/desain utama
@@ -4661,4 +4692,33 @@ body {
   .product-footer a {
     font-size: 0.5rem;
   }
+}
+
+
+/* =========================================================
+   mulai dari biar tidak menyatu
+   ========================================================= */
+
+.product-footer > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.product-footer > div > span {
+  display: block;
+  color: #717784;
+  font-size: 0.58rem;
+  line-height: 1.2;
+}
+
+.product-footer > div > strong {
+  display: block;
+  margin: 0;
+  color: #16161a;
+  font-size: 0.78rem;
+  line-height: 1.2;
+  font-weight: 700;
+  white-space: nowrap;
 }

@@ -18,7 +18,7 @@ export const products: Product[] = [
     category: "Outdoor & Event",
     description:
       "Banner dan spanduk untuk promosi toko, event, acara, dan kebutuhan outdoor.",
-    priceLabel: "Mulai Rp23.000",
+    priceLabel: "Rp23.000",
     price: 23000,
     unit: "m²",
     size: "Custom",
@@ -32,7 +32,7 @@ export const products: Product[] = [
     category: "Promosi",
     description:
       "Brosur untuk memperkenalkan produk, layanan, promo, dan informasi bisnis.",
-    priceLabel: "Mulai Rp75.000",
+    priceLabel: "Rp75.000",
     price: 75000,
     unit: "paket",
     size: "A5 / A4",
@@ -46,7 +46,7 @@ export const products: Product[] = [
     category: "Promosi & Event",
     description:
       "Poster untuk promosi, pengumuman, event, kampanye, dan kebutuhan visual lainnya.",
-    priceLabel: "Mulai Rp8.000",
+    priceLabel: "Rp8.000",
     price: 8000,
     unit: "lembar",
     size: "A3+",
@@ -59,7 +59,7 @@ export const products: Product[] = [
     category: "Branding",
     description:
       "Stiker custom untuk kemasan produk, branding, label, dan kebutuhan promosi.",
-    priceLabel: "Mulai Rp10.000",
+    priceLabel: "Rp10.000",
     price: 10000,
     unit: "lembar",
     size: "Custom",
