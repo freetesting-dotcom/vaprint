@@ -4335,65 +4335,330 @@ textarea:focus-visible {
 }
 
 
-/* =========================================
+/* =========================================================
+   RESPONSIVE OVERFLOW FIX
+   Menjaga UI tetap utuh tanpa mengubah tema/desain utama
+   ========================================================= */
+
+/* Semua elemen mengikuti box sizing dan viewport */
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+*,
+*::before,
+*::after {
+  min-width: 0;
+}
+
+.site-shell {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+
+/* =========================================================
    TABLET
-   ========================================= */
+   ========================================================= */
 
-@media (max-width: 900px) {
-  .footer-location {
-    grid-template-columns: 1fr;
-    gap: 28px;
+@media (max-width: 1024px) {
+  .section,
+  .statement-band,
+  .cta-section,
+  .footer-card {
+    max-width: 100%;
   }
 
-  .footer-location-heading {
-    max-width: 520px;
+  .products-grid,
+  .catalog-grid,
+  .benefit-grid,
+  .process-grid {
+    width: 100%;
+    max-width: 100%;
   }
 
-  .location-card {
-    grid-template-columns: 1fr 1fr;
+  .product-card {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .product-visual,
+  .product-body,
+  .product-footer {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .product-topline {
+    min-width: 0;
+  }
+
+  .product-topline > * {
+    min-width: 0;
+  }
+
+  .product-body p {
+    max-width: 100%;
+    overflow-wrap: anywhere;
   }
 }
 
 
-/* =========================================
+/* =========================================================
    MOBILE
-   ========================================= */
+   ========================================================= */
 
-@media (max-width: 640px) {
-  .footer-location {
-    margin-top: 44px;
-    padding-top: 34px;
-
-    grid-template-columns: 1fr;
+@media (max-width: 768px) {
+  html,
+  body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
   }
 
-  .footer-location-heading h2 {
-    font-size: clamp(42px, 14vw, 58px);
+  .site-shell {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: clip;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
   }
 
-  .location-card {
-    grid-template-columns: 1fr;
+  .section {
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
 
+  /* =========================
+     PRODUCT GRID
+     ========================= */
+
+  .products-grid {
+    width: 100%;
+    max-width: 100%;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 1rem;
+  }
+
+  .product-card {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0 !important;
+    height: auto;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  /* =========================
+     PRODUCT VISUAL
+     ========================= */
+
+  .product-visual {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    min-height: 0;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  .product-swatch {
+    max-width: none;
+  }
+
+  .mini-sheet {
+    max-width: none;
+    box-sizing: border-box;
+  }
+
+  /* Hindari transform/dekorasi membuat
+     elemen keluar viewport */
+  .mini-sheet,
+  .product-corner,
+  .popular-tag {
+    max-width: calc(100% - 1rem);
+  }
+
+  /* =========================
+     PRODUCT BODY
+     ========================= */
+
+  .product-body {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0 !important;
+    box-sizing: border-box;
+    padding: 1rem;
+  }
+
+  .product-card .product-body {
     min-height: auto;
-
-    border-radius: 16px;
   }
 
-  .location-map {
-    min-height: 190px;
+  .product-topline {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    gap: 0.75rem;
+    flex-wrap: wrap;
   }
 
-  .location-info {
-    padding: 24px;
+  .product-topline > * {
+    min-width: 0;
   }
 
-  .map-ring-one {
-    width: 80px;
-    height: 80px;
+  .product-body h3 {
+    max-width: 100%;
+    overflow-wrap: anywhere;
   }
 
-  .map-ring-two {
-    width: 135px;
-    height: 135px;
+  .product-body p {
+    max-width: 100%;
+    min-height: auto;
+    overflow-wrap: anywhere;
+  }
+
+  /* =========================
+     PRODUCT FOOTER
+     ========================= */
+
+  .product-footer {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+
+    gap: 0.75rem;
+  }
+
+  .product-footer > span,
+  .product-footer > a {
+    min-width: 0;
+  }
+
+  .product-footer > span {
+    max-width: 60%;
+    overflow-wrap: anywhere;
+  }
+
+  .product-footer a {
+    white-space: nowrap;
+  }
+
+  /* =========================
+     OTHER COMMON OVERFLOW
+     ========================= */
+
+  .section-head,
+  .section-grid-two,
+  .hero-content,
+  .catalog-hero-grid,
+  .catalog-heading {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  img,
+  svg,
+  video,
+  canvas {
+    max-width: 100%;
+  }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 480px) {
+  .site-shell {
+    padding-left: 0.35rem;
+    padding-right: 0.35rem;
+  }
+
+  .section {
+    padding-left: 0.85rem;
+    padding-right: 0.85rem;
+  }
+
+  .products-grid {
+    gap: 0.85rem;
+  }
+
+  .product-card {
+    border-radius: 1.1rem;
+  }
+
+  .product-body {
+    padding: 0.9rem;
+  }
+
+  .product-topline {
+    font-size: 0.48rem;
+  }
+
+  .product-body h3 {
+    font-size: 1.15rem;
+  }
+
+  .product-body p {
+    font-size: 0.7rem;
+    line-height: 1.55;
+  }
+
+  .product-footer {
+    gap: 0.5rem;
+  }
+
+  .product-footer > span {
+    font-size: 0.68rem;
+    max-width: 58%;
+  }
+
+  .product-footer a {
+    font-size: 0.55rem;
+  }
+}
+
+
+/* =========================================================
+   VERY SMALL DEVICES
+   ========================================================= */
+
+@media (max-width: 360px) {
+  .site-shell {
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+  }
+
+  .section {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  .product-body {
+    padding: 0.8rem;
+  }
+
+  .product-footer > span {
+    max-width: 55%;
+    font-size: 0.64rem;
+  }
+
+  .product-footer a {
+    font-size: 0.5rem;
   }
 }
