@@ -203,31 +203,6 @@ export default function ProductsPage() {
         )}
       </section>
 
-      <section className="catalog-cta">
-        <div>
-          <div className="eyebrow eyebrow-light">
-            <span className="eyebrow-dot" />
-            Tidak menemukan yang dicari?
-          </div>
-
-          <h2>
-            Punya kebutuhan
-            <br />
-            <span>khusus?</span>
-          </h2>
-        </div>
-
-        <a
-          href={whatsappUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="pill-button pill-button-dark"
-        >
-          Konsultasi via WhatsApp
-          <span className="pill-arrow">→</span>
-        </a>
-      </section>
-
       <footer className="footer-card">
         <div className="footer-cta">
           <div>

@@ -1,5 +1,6 @@
 "use client";
 
+import BackToTop from "@/components/BackToTop";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -297,12 +298,12 @@ export default function Home() {
 
     const message = encodeURIComponent(
       [
-        "Halo VaPrint, saya ingin konsultasi.",
+        "Halo VaPrint",
         "",
         `Nama: ${contactName.trim()}`,
         `Email: ${contactEmail.trim()}`,
         "",
-        "Kebutuhan cetak:",
+        "Saya ingin konsultasi:",
         contactMessage.trim(),
       ].join("\n")
     );
@@ -438,9 +439,9 @@ export default function Home() {
       <section className="statement-band">
         <div>
           <span className="statement-kicker">VaPrint / 2026</span>
-          <p>Dari ide di layar → jadi sesuatu yang bisa dipegang.</p>
+          <p>Dari ide di layar → Menjadi sesuatu yang bisa dipegang.</p>
         </div>
-        <span className="statement-arrow">01 — 08</span>
+        <span className="statement-arrow">01 — 09</span>
       </section>
 
       <section id="kenapa-vaprint" className="section section-light">
@@ -779,23 +780,88 @@ export default function Home() {
       </section>
 
       <footer id="contact" className="footer-card">
-        <div className="footer-cta">
-          <div>
-            <Eyebrow light>Mulai pesan</Eyebrow>
-            <h2>
-              Siap untuk
+        {/* LOCATION */}
+        <section className="footer-location" aria-labelledby="location-title">
+          <div className="footer-location-heading">
+            <span className="footer-eyebrow">
+              <i />
+              LOKASI KAMI
+            </span>
+
+            <h2 id="location-title">
+              Temukan
               <br />
-              <span>dicetak?</span>
+              <em>VaPrint.</em>
             </h2>
+
+            <p>
+              Datang langsung atau hubungi kami untuk kebutuhan digital printing
+              Anda.
+            </p>
           </div>
-          <button
-            type="button"
-            className="footer-book"
-            onClick={openContact}
-          >
-            Konsultasi <ArrowRight />
-          </button>
-        </div>
+
+          <div className="location-card">
+            <div className="location-map">
+              <div className="map-grid" />
+
+              <div className="map-ring map-ring-one" />
+              <div className="map-ring map-ring-two" />
+
+              <div className="location-pin">
+                <span />
+
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M20 10.5C20 15.5 12 21 12 21C12 21 4 15.5 4 10.5C4 6.36 7.58 3 12 3C16.42 3 20 6.36 20 10.5Z"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                  />
+
+                  <circle
+                    cx="12"
+                    cy="10"
+                    r="2.8"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                  />
+                </svg>
+              </div>
+
+              <span className="map-label">VAPRINT</span>
+            </div>
+
+            <div className="location-info">
+              <span className="location-label">ALAMAT</span>
+
+              <h3>VaPrint Digital Printing</h3>
+
+              <p>
+                Jl. Nangka no. 11 a,
+                <br />
+                Kecamatan Bayumanik, Kota Semarang,
+                <br />
+                Indonesia
+              </p>
+
+              <div className="location-actions">
+                <a
+                  href="https://maps.app.goo.gl/aNF2Xw3SDfR1XV86A"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="location-map-link"
+                >
+                  Buka Google Maps
+                  <span>↗</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
 
         <div className="footer-grid">
           <div>
@@ -966,7 +1032,7 @@ export default function Home() {
                 </label>
 
                 <label>
-                  Kebutuhan cetak
+                  Isi Konsultasi
                   <textarea
                     required
                     rows={4}
@@ -974,7 +1040,7 @@ export default function Home() {
                     onChange={(event) =>
                       setContactMessage(event.target.value)
                     }
-                    placeholder="Saya ingin mencetak banner untuk event..."
+                    placeholder="Saya ingin berkonsultasi seputar digital printing..."
                   />
                 </label>
 
@@ -1008,6 +1074,7 @@ export default function Home() {
           </div>
         </div>
       )}
+      <BackToTop />
     </main>
   );
 }

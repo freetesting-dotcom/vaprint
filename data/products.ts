@@ -14,7 +14,7 @@ export type Product = {
 export const products: Product[] = [
   {
     id: "banner",
-    name: "Banner / Spanduk",
+    name: "Banner",
     category: "Outdoor & Event",
     description:
       "Banner dan spanduk untuk promosi toko, event, acara, dan kebutuhan outdoor.",
