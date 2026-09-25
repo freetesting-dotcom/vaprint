@@ -24,14 +24,20 @@
 }
 
 html {
+  width: 100%;
+  max-width: 100%;
   scroll-behavior: smooth;
   background: var(--background);
+  overflow-x: hidden;
 }
 
 body {
+  width: 100%;
+  max-width: 100%;
   margin: 0;
   min-height: 100vh;
   background: var(--background);
+  overflow-x: hidden;
   color: var(--foreground);
   font-family: "Onest", system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -79,6 +85,7 @@ textarea:focus-visible {
 
 .site-shell {
   width: 100%;
+  max-width: 100%;
   overflow-x: clip;
   padding: 0.75rem;
 }
@@ -3838,56 +3845,6 @@ textarea:focus-visible {
   }
 }
 
-.location-card {
-  min-height: 220px;
-
-  display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
-
-  overflow: hidden;
-
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 18px;
-
-  background:
-    linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.04),
-      rgba(255, 255, 255, 0.015)
-    );
-
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.025),
-    0 12px 32px rgba(0, 0, 0, 0.14);
-
-  transition:
-    border-color 0.3s ease,
-    box-shadow 0.3s ease,
-    transform 0.3s ease;
-}
-
-.location-card:hover {
-  border-color: rgba(255, 255, 255, 0.16);
-
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.035),
-    0 16px 38px rgba(0, 0, 0, 0.2);
-
-  transform: translateY(-2px);
-}
-
-@media (max-width: 900px) {
-  .location-card {
-    grid-template-columns: 1fr;
-    min-height: auto;
-  }
-}
-
-@media (max-width: 640px) {
-  .location-card {
-    border-radius: 16px;
-  }
-}
 
 /* =========================================
    FOOTER LOCATION
@@ -3908,33 +3865,11 @@ textarea:focus-visible {
   align-items: center;
   gap: 36px;
 
-  border-top: none;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .footer-location-heading {
   max-width: 320px;
-}
-
-.footer-location-heading h2 {
-  margin: 0;
-
-  color: #ffffff;
-
-  font-size: clamp(38px, 3.5vw, 56px);
-  line-height: 0.92;
-  font-weight: 500;
-  letter-spacing: -0.055em;
-}
-
-.footer-location-heading p {
-  max-width: 270px;
-  margin: 16px 0 0;
-
-  color: rgba(255, 255, 255, 0.52);
-
-  font-size: 12px;
-  line-height: 1.6;
 }
 
 .footer-eyebrow {
@@ -4009,246 +3944,43 @@ textarea:focus-visible {
   box-shadow:
     0 8px 24px rgba(0, 0, 0, 0.14),
     inset 0 1px 0 rgba(255, 255, 255, 0.025);
+
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
+}
+
+.location-card:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.035),
+    0 16px 38px rgba(0, 0, 0, 0.2);
+
+  transform: translateY(-2px);
 }
 
 
 /* =========================================
-   MAP AREA
+   GOOGLE MAPS
    ========================================= */
 
 .location-map {
   position: relative;
+  min-width: 0;
   min-height: 190px;
   overflow: hidden;
 
-  background:
-    radial-gradient(
-      circle at center,
-      rgba(255, 104, 69, 0.08),
-      transparent 48%
-    ),
-    #111216;
+  background: #e5e5e5;
 }
 
-.location-info {
-  min-width: 0;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-
-  padding: 24px 26px;
-}
-
-.map-grid {
-  position: absolute;
-  inset: -40px;
-
-  background-image:
-    linear-gradient(
-      rgba(255, 255, 255, 0.04) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0.04) 1px,
-      transparent 1px
-    );
-
-  background-size: 38px 38px;
-
-  opacity: 0.38;
-
-  transform: rotate(-7deg);
-
-  animation: mapGridMove 12s linear infinite;
-}
-
-@keyframes mapGridMove {
-  from {
-    background-position: 0 0, 0 0;
-  }
-
-  to {
-    background-position: 38px 38px, 38px 38px;
-  }
-}
-
-
-/* =========================================
-   STATIC MAP RINGS
-   ========================================= */
-
-.map-ring {
-  position: absolute;
-
-  left: 50%;
-  top: 50%;
-
-  border: 1px solid rgba(255, 104, 69, 0.15);
-  border-radius: 50%;
-
-  transform: translate(-50%, -50%);
-
-  pointer-events: none;
-}
-
-.map-ring-one {
-  width: 90px;
-  height: 90px;
-}
-
-.map-ring-two {
-  width: 150px;
-  height: 150px;
-}
-
-
-/* =========================================
-   LOCATION PIN
-   ========================================= */
-
-.location-pin {
-  position: absolute;
-
-  left: 50%;
-  top: 50%;
-
-  width: 44px;
-  height: 44px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 50%;
-
-  background: #ff6845;
-  color: #ffffff;
-
-  transform: translate(-50%, -50%);
-
-  z-index: 5;
-
-  box-shadow:
-    0 8px 20px rgba(255, 104, 69, 0.28),
-    0 0 0 5px rgba(255, 104, 69, 0.08);
-}
-
-
-/* SVG WAJIB dibatasi ukurannya */
-.location-pin svg {
+.location-map iframe {
   display: block;
-
-  width: 21px !important;
-  height: 21px !important;
-
-  max-width: 21px;
-  max-height: 21px;
-
-  color: #ffffff;
-
-  position: relative;
-  z-index: 2;
-}
-
-
-/* =========================================
-   REALTIME GOOGLE MAPS STYLE PULSE
-   ========================================= */
-
-.location-pin::before,
-.location-pin::after {
-  content: "";
-
-  position: absolute;
-
-  left: 50%;
-  top: 50%;
-
-  width: 44px;
-  height: 44px;
-
-  border: 1px solid rgba(255, 104, 69, 0.5);
-  border-radius: 50%;
-
-  transform: translate(-50%, -50%) scale(1);
-
-  pointer-events: none;
-
-  animation: locationPulse 2.4s ease-out infinite;
-}
-
-.location-pin::after {
-  animation-delay: 1.2s;
-}
-
-@keyframes locationPulse {
-  0% {
-    opacity: 0.75;
-    transform: translate(-50%, -50%) scale(1);
-  }
-
-  70% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(2.6);
-  }
-
-  100% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(2.6);
-  }
-}
-
-
-/* titik pusat */
-.location-pin > span {
-  position: absolute;
-
-  width: 5px;
-  height: 5px;
-
-  border-radius: 50%;
-  background: #ffffff;
-
-  z-index: 4;
-
-  opacity: 0;
-
-  animation: locationDot 1.5s ease-in-out infinite;
-}
-
-@keyframes locationDot {
-  0%,
-  100% {
-    transform: scale(0.8);
-    opacity: 0.6;
-  }
-
-  50% {
-    transform: scale(1.15);
-    opacity: 1;
-  }
-}
-
-
-/* =========================================
-   MAP LABEL
-   ========================================= */
-
-.map-label {
-  position: absolute;
-
-  left: 20px;
-  bottom: 16px;
-
-  color: rgba(255, 255, 255, 0.38);
-
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.2em;
-
-  z-index: 2;
+  width: 100%;
+  height: 100%;
+  min-height: 190px;
+  border: 0;
 }
 
 
@@ -4325,7 +4057,6 @@ textarea:focus-visible {
 
 .location-map-link span {
   color: #ff6845;
-
   font-size: 15px;
 }
 
@@ -4335,62 +4066,65 @@ textarea:focus-visible {
 }
 
 
-/* ========================================= MOBILE ========================================= */ 
-@media (max-width: 640px) { 
-  .footer-location { 
-    margin-top: 44px; 
-    padding-top: 34px; 
-    
-    grid-template-columns: 1fr; 
-  } 
-  .footer-location-heading h2 {
-    font-size: clamp(42px, 14vw, 58px); 
-  } 
-  .location-card { 
-    grid-template-columns: 1fr; 
-    min-height: auto; 
-    border-radius: 16px; 
-  } 
-  .location-map {
-    min-height: 190px; 
-  } 
-  .location-info {
-    padding: 24px; 
-  } 
-  .map-ring-one { 
-    width: 80px; height: 80px; 
-  } 
-  .map-ring-two { 
-    width: 135px; height: 135px; 
-  } 
+/* =========================================
+   LOCATION RESPONSIVE
+   ========================================= */
+
+@media (max-width: 900px) {
+  .location-card {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
 }
 
+@media (max-width: 768px) {
+  .footer-location {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .footer-location-heading {
+    width: 100%;
+  }
+
+  .location-card {
+    width: 100%;
+  }
+
+  .location-map {
+    width: 100%;
+    height: 280px;
+    min-height: 280px;
+  }
+
+  .location-map iframe {
+    width: 100%;
+    height: 280px;
+    min-height: 280px;
+  }
+
+  .location-info {
+    width: 100%;
+    padding: 28px 30px 32px;
+  }
+}
+
+@media (max-width: 640px) {
+  .location-card {
+    border-radius: 16px;
+  }
+}
 
 /* =========================================================
    RESPONSIVE OVERFLOW FIX
-   Menjaga UI tetap utuh tanpa mengubah tema/desain utama
    ========================================================= */
 
-/* Semua elemen mengikuti box sizing dan viewport */
-html,
-body {
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
-}
-
+/* Keep layout elements within the viewport on smaller screens. */
 *,
 *::before,
 *::after {
   min-width: 0;
 }
-
-.site-shell {
-  width: 100%;
-  max-width: 100%;
-  overflow-x: clip;
-}
-
 
 /* =========================================================
    TABLET
@@ -4696,7 +4430,7 @@ body {
 
 
 /* =========================================================
-   mulai dari biar tidak menyatu
+   PRODUCT FOOTER DETAIL
    ========================================================= */
 
 .product-footer > div {
@@ -4721,4 +4455,15 @@ body {
   line-height: 1.2;
   font-weight: 700;
   white-space: nowrap;
+}
+
+/* =========================================================
+   PRODUCT LOGO VAPRINT
+   ========================================================= */
+
+.detail-brand img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  display: block;
 }

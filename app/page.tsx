@@ -801,40 +801,21 @@ export default function Home() {
           </div>
 
           <div className="location-card">
+
+            {/* KOLOM KIRI: GOOGLE MAPS */}
             <div className="location-map">
-              <div className="map-grid" />
-
-              <div className="map-ring map-ring-one" />
-              <div className="map-ring map-ring-two" />
-
-              <div className="location-pin">
-                <span />
-
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M20 10.5C20 15.5 12 21 12 21C12 21 4 15.5 4 10.5C4 6.36 7.58 3 12 3C16.42 3 20 6.36 20 10.5Z"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                  />
-
-                  <circle
-                    cx="12"
-                    cy="10"
-                    r="2.8"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                  />
-                </svg>
-              </div>
-
-              <span className="map-label">VAPRINT</span>
+              <iframe
+                src="https://www.google.com/maps?q=VaPrint+Digital+Printing,+Jl.+Nangka+No.+11A,+Kecamatan+Banyumanik,+Kota+Semarang,+Jawa+Tengah,+Indonesia&output=embed"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                loading="lazy"
+                allowFullScreen
+                referrerPolicy="no-referrer-when-downgrade"
+              />
             </div>
 
+            {/* KOLOM KANAN: INFORMASI */}
             <div className="location-info">
               <span className="location-label">ALAMAT</span>
 
@@ -852,7 +833,7 @@ export default function Home() {
                 <a
                   href="https://maps.app.goo.gl/aNF2Xw3SDfR1XV86A"
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel="noreferrer"
                   className="location-map-link"
                 >
                   Buka Google Maps
@@ -860,6 +841,7 @@ export default function Home() {
                 </a>
               </div>
             </div>
+
           </div>
         </section>
 

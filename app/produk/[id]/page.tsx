@@ -159,8 +159,8 @@ export default function ProductDetailPage() {
       <section className="detail-shell">
         <header className="detail-header">
           <Link href="/" className="detail-brand">
-            <span className="detail-brand-mark">
-              V
+            <span>
+              <img src="/vaprint.png" alt="VaPrint" />
             </span>
 
             <span>
