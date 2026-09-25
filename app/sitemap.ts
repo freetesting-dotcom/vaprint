@@ -1,23 +1,21 @@
 import type { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://vaprint.vercel.app";
-
   return [
     {
-      url: baseUrl,
+      url: "https://vaprint.vercel.app",
       lastModified: new Date(),
     },
     {
-      url: `${baseUrl}/produk`,
+      url: "https://vaprint.vercel.app/produk",
       lastModified: new Date(),
     },
     {
-      url: `${baseUrl}/cara-order`,
+      url: "https://vaprint.vercel.app/cara-order",
       lastModified: new Date(),
     },
     {
-      url: `${baseUrl}/tentang`,
+      url: "https://vaprint.vercel.app/tentang",
       lastModified: new Date(),
     },
   ];
