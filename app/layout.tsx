@@ -17,6 +17,9 @@ export const metadata: Metadata = {
   icons: {
     icon: "/iconweb.png",
   },
+  verification: {
+     google: "stUx1e27OpMHplEzJKFdPgz_foVrZCvlQQ1V-Z65T3k", 
+  },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
