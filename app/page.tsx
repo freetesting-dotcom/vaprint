@@ -383,9 +383,9 @@ export default function Home() {
               <span>Siap dipakai.</span>
             </h1>
             <p>
-              Temukan kebutuhan printing Anda, lihat estimasi harga, lalu pesan
-              langsung lewat WhatsApp. Sederhana, transparan, tanpa checkout
-              yang ribet.
+              VaPrint adalah layanan digital printing di Semarang untuk kebutuhan
+              banner, brosur, poster, sticker, dan berbagai kebutuhan cetak custom.
+              Lihat produk, hitung estimasi harga, lalu pesan langsung melalui WhatsApp.
             </p>
             <div className="hero-buttons">
               <PillButton href="#produk">Lihat produk</PillButton>
@@ -824,7 +824,7 @@ export default function Home() {
               <p>
                 Jl. Nangka no. 11 a,
                 <br />
-                Kecamatan Bayumanik, Kota Semarang,
+                Kecamatan Banyumanik, Kota Semarang,
                 <br />
                 Indonesia
               </p>

@@ -75,8 +75,9 @@ export default function ProductsPage() {
               </h1>
 
               <p className="catalog-lead">
-                Pilih produk printing sesuai kebutuhan Anda. Lihat spesifikasi,
-                estimasi harga, lalu lanjutkan pemesanan melalui WhatsApp.
+                Temukan berbagai produk digital printing VaPrint untuk kebutuhan
+                promosi, bisnis, branding, dan event. Pilih produk, lihat spesifikasi
+                dan estimasi harga, lalu lanjutkan pemesanan melalui WhatsApp.
               </p>
             </div>
 

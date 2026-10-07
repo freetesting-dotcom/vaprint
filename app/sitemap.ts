@@ -11,11 +11,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
     },
     {
-      url: "https://vaprint.vercel.app/cara-order",
+      url: "https://vaprint.vercel.app/produk/banner",
       lastModified: new Date(),
     },
     {
-      url: "https://vaprint.vercel.app/tentang",
+      url: "https://vaprint.vercel.app/produk/brosur",
+      lastModified: new Date(),
+    },
+    {
+      url: "https://vaprint.vercel.app/produk/poster",
+      lastModified: new Date(),
+    },
+    {
+      url: "https://vaprint.vercel.app/produk/sticker",
       lastModified: new Date(),
     },
   ];
