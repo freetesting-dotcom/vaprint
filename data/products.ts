@@ -8,6 +8,7 @@ export type Product = {
   unit: string;
   size: string;
   material: string[];
+  priceByMaterial?: Record<string, number>;
   popular?: boolean;
 };
 
@@ -58,13 +59,17 @@ export const products: Product[] = [
     name: "Sticker",
     category: "Branding",
     description:
-      "Stiker custom untuk kemasan produk, branding, label, dan kebutuhan promosi.",
+      "Stiker cocok untuk kemasan produk, branding, label, dan kebutuhan promosi.",
     priceLabel: "Rp10.000",
-    price: 10000,
+    price: 10000, // Harga default jika masih diperlukan
     unit: "lembar",
-    size: "Custom",
+    size: "A3 +",
     material: ["Vinyl", "Chromo"],
+    priceByMaterial: {
+      Vinyl: 15000,
+      Chromo: 10000,
+    },
     popular: true,
-  },
+  }
 
 ];

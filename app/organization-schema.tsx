@@ -8,7 +8,7 @@ export default function OrganizationSchema() {
     logo: "https://vaprint.vercel.app/vaprint.png",
     description:
       "VaPrint adalah layanan digital printing di Semarang untuk banner, brosur, poster, sticker, dan berbagai kebutuhan cetak custom.",
-    email: "play@vaprint.id",
+    email: "adiwibowodeva@gmail.com",
     telephone: "+6285802506149",
   };
 

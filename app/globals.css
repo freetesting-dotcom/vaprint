@@ -1900,7 +1900,7 @@ textarea:focus-visible {
   color: #fff;
   font-size: clamp(3.8rem, 8vw, 9rem);
   line-height: 0.84;
-  letter-spacing: -0.075em;
+  letter-spacing: -0.090em;
   font-weight: 600;
 }
 
@@ -4466,4 +4466,31 @@ textarea:focus-visible {
   height: 48px;
   object-fit: contain;
   display: block;
+}
+
+/* =========================================================
+   REVISI KATALOG TANDA KANAN
+   ========================================================= */
+
+
+@media (max-width: 768px) {
+  .catalog-topbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  .catalog-code {
+    order: 1;
+    margin-right: auto;
+    text-align: left;
+  }
+
+  .catalog-back {
+    order: 2;
+    margin-left: auto;
+    text-align: right;
+  }
 }

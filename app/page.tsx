@@ -383,7 +383,7 @@ export default function Home() {
               <span>Siap dipakai.</span>
             </h1>
             <p>
-              VaPrint adalah layanan digital printing di Semarang untuk kebutuhan
+              VaPrint siap melayani kebutuhan digital printing di Semarang seperti
               banner, brosur, poster, sticker, dan berbagai kebutuhan cetak custom.
               Lihat produk, hitung estimasi harga, lalu pesan langsung melalui WhatsApp.
             </p>
@@ -882,7 +882,7 @@ export default function Home() {
             >
               WhatsApp
             </a>
-            <a href="mailto:play@vaprint.id">play@vaprint.id</a>
+            <a href="mailto:adiwibowodeva@gmail.com">adiwibowodeva@gmail.com</a>
             <span>Indonesia</span>
             <span>Digital Printing Online</span>
           </div>

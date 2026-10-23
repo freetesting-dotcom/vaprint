@@ -53,12 +53,14 @@ export default function ProductsPage() {
     <main className="site-shell catalog-page">
       <section className="catalog-hero section section-dark">
         <div className="catalog-topbar">
+          <span className="catalog-code">VaPrint / Katalog</span>
+
           <Link href="/" className="catalog-back">
             <span aria-hidden="true">←</span>
             Kembali ke beranda
           </Link>
-          <span className="catalog-code">VaPrint / Katalog</span>
         </div>
+
 
         <div className="catalog-hero-grid">
           <div>
@@ -69,9 +71,9 @@ export default function ProductsPage() {
               </div>
 
               <h1 className="catalog-title">
-                Cetak apa yang
+                Cetak apa yang Anda
                 <br />
-                Anda <span>butuhkan.</span>
+                <span>Butuhkan.</span>
               </h1>
 
               <p className="catalog-lead">
@@ -254,7 +256,7 @@ export default function ProductsPage() {
             <a href={whatsappUrl} target="_blank" rel="noreferrer">
               WhatsApp
             </a>
-            <a href="mailto:play@vaprint.id">play@vaprint.id</a>
+            <a href="mailto:adiwibowodeva@gmail.com">adiwibowodeva@gmail.com</a>
             <span>Indonesia</span>
           </div>
 

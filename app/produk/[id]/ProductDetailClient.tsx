@@ -86,6 +86,7 @@ export default function ProductDetailPage() {
   const safeHeight = Math.max(0.1, height || 0.1);
   const safeQuantity = Math.max(1, quantity || 1);
 
+  
   const totalPrice = useMemo(() => {
     if (!product) return 0;
 
@@ -97,13 +98,19 @@ export default function ProductDetailPage() {
       );
     }
 
-    return product.price * safeQuantity;
+    const unitPrice =
+      product.priceByMaterial?.[selectedMaterial] ??
+      product.price;
+
+    return unitPrice * safeQuantity;
   }, [
     product,
     safeWidth,
     safeHeight,
     safeQuantity,
+    selectedMaterial,
   ]);
+
 
   const formattedPrice = new Intl.NumberFormat("id-ID", {
     style: "currency",
