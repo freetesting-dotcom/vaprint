@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import ProductCard from "../../components/ProductCard";
 import { products } from "../../data/products";
+import Image from "next/image";
 
 const WHATSAPP_NUMBER = "6285802506149";
 
@@ -234,13 +235,31 @@ export default function ProductsPage() {
         <div className="footer-grid">
           <div>
             <div className="brand-footer">
-              <strong>VaPrint</strong>
-              <small>Digital Printing Online</small>
+               <Image
+                  src="/vaprint.png"
+                  alt="Logo VaPrint"
+                  width={40}
+                  height={40}
+                />
+                <div>
+                  <strong>VaPrint</strong>
+                  <small>Digital Printing Online</small>
+                </div>
             </div>
             <p>
               Solusi digital printing untuk kebutuhan personal, bisnis,
               promosi, dan event.
             </p>
+            <small className="footer-founder">
+              Founded & Developed by{" "}
+              <a
+                href="https://www.linkedin.com/in/devabagusa/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Deva Bagus Adiwibowo
+              </a>
+            </small>
           </div>
 
           <div>
@@ -257,7 +276,8 @@ export default function ProductsPage() {
               WhatsApp
             </a>
             <a href="mailto:adiwibowodeva@gmail.com">adiwibowodeva@gmail.com</a>
-            <span>Indonesia</span>
+            <span>Kota Semarang</span>
+            <span>Digital Printing Online</span>
           </div>
 
           <div>

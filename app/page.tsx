@@ -863,6 +863,16 @@ export default function Home() {
               Solusi digital printing untuk kebutuhan personal, bisnis,
               promosi, dan event.
             </p>
+            <small className="footer-founder">
+              Founded & Developed by{" "}
+              <a
+                href="https://www.linkedin.com/in/devabagusa/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Deva Bagus Adiwibowo
+              </a>
+            </small>
           </div>
 
           <div>
@@ -883,7 +893,7 @@ export default function Home() {
               WhatsApp
             </a>
             <a href="mailto:adiwibowodeva@gmail.com">adiwibowodeva@gmail.com</a>
-            <span>Indonesia</span>
+            <span>Kota Semarang</span>
             <span>Digital Printing Online</span>
           </div>
 
